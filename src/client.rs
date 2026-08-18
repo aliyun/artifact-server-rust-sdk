@@ -116,6 +116,14 @@ impl ClientBuilder {
         self
     }
 
+    pub(crate) fn base_url_str(&self) -> &str {
+        &self.base_url
+    }
+
+    pub(crate) fn timeout_value(&self) -> Duration {
+        self.timeout
+    }
+
     pub fn build(self) -> Result<Client> {
         let base_url = self.base_url.trim_end_matches('/').to_string();
         if base_url.is_empty() {
