@@ -1,0 +1,29 @@
+[package]
+name = "artifact-resolve-sdk"
+version = "0.1.0"
+edition = "2021"
+description = "Rust SDK for Artifact Server Transparency Resolve (POST /api/v1/transparency/resolve)"
+license = "Apache-2.0"
+keywords = ["artifact-server", "transparency", "resolve", "rekor"]
+categories = ["api-bindings"]
+
+[dependencies]
+reqwest = { version = "0.12", default-features = false, features = [
+    "json",
+    "rustls-tls",
+] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+wiremock = "0.6"
+
+[features]
+default = []
+blocking = ["reqwest/blocking"]
+
+[[example]]
+name = "resolve"
+required-features = []
