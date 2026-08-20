@@ -24,6 +24,7 @@ const USER_AGENT: &str = concat!("artifact-resolve-sdk/", env!("CARGO_PKG_VERSIO
 #[derive(Clone, Debug)]
 pub struct Client {
     http: HttpClient,
+    timeout: Duration,
     base_url: String,
 }
 
@@ -69,6 +70,7 @@ impl Client {
         let response = self
             .http
             .post(&url)
+            .timeout(self.timeout)
             .header(reqwest::header::ACCEPT, "application/json")
             .json(request)
             .send()
@@ -131,12 +133,13 @@ impl ClientBuilder {
         }
         let http = match self.http {
             Some(http) => http,
-            None => HttpClient::builder()
-                .timeout(self.timeout)
-                .user_agent(USER_AGENT)
-                .build()?,
+            None => HttpClient::builder().user_agent(USER_AGENT).build()?,
         };
-        Ok(Client { http, base_url })
+        Ok(Client {
+            http,
+            timeout: self.timeout,
+            base_url,
+        })
     }
 }
 
